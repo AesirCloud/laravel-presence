@@ -1,0 +1,56 @@
+{
+  "name": "aesircloud/laravel-presence",
+  "version": "dev-main",
+  "description": "User presence (online/away/offline) for Laravel with cache or webhook driver and Pest v4 tests.",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "AesirCloud"
+    }
+  ],
+    "require": {
+    "php": "^8.2|^8.3|^8.4",
+    "illuminate/support": "^12.0",
+    "illuminate/cache": "^12.0",
+    "illuminate/auth": "^12.0",
+    "illuminate/http": "^12.0",
+    "illuminate/contracts": "^12.0"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^10.0",
+    "pestphp/pest": "^4.0",
+    "pestphp/pest-plugin-laravel": "^4.0",
+    "mockery/mockery": "^1.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "AesirCloud\\Presence\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "AesirCloud\\Presence\\PresenceServiceProvider"
+      ],
+      "aliases": {
+        "Presence": "AesirCloud\\Presence\\Facades\\Presence"
+      }
+    }
+  },
+  "scripts": {
+    "test": "pest"
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  }
+}
