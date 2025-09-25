@@ -11,33 +11,37 @@ beforeEach(function () {
 });
 
 it('marks user online and transitions to away/offline based on time', function () {
-    $user = new User(1);
+    $user = new User(['id' => 1, 'name' => 'Test User']);
 
+    // Set initial time and heartbeat
     Carbon::setTestNow('2025-01-01 00:00:00');
     Presence::heartbeat($user);
 
-    $status = Presence::status($user->id);
+    // Check initial status
+    $status = Presence::status($user->getAuthIdentifier());
     expect($status['status'])->toBe('online')
         ->and($status['seconds_ago'])->toBe(0);
 
-    Carbon::setTestNow('2025-01-01 00:01:40');
-    $status = Presence::status($user->id);
+    // Move time forward by exactly 90 seconds (should be 'away' since >= 90)
+    Carbon::setTestNow('2025-01-01 00:01:30'); // exactly 90 seconds later
+    $status = Presence::status($user->getAuthIdentifier());
     expect($status['status'])->toBe('away');
 
-    Carbon::setTestNow('2025-01-01 00:02:10');
-    $status = Presence::status($user->id);
+    // Move time forward by exactly 120 seconds total (should be 'offline' since >= 120)
+    Carbon::setTestNow('2025-01-01 00:02:00'); // exactly 120 seconds later
+    $status = Presence::status($user->getAuthIdentifier());
     expect($status['status'])->toBe('offline');
 });
 
 it('returns a map for many users', function () {
     Carbon::setTestNow('2025-01-01 00:00:00');
 
-    $u1 = new User(1);
-    $u2 = new User(2);
+    $u1 = new User(['id' => 1, 'name' => 'User 1']);
+    $u2 = new User(['id' => 2, 'name' => 'User 2']);
 
     Presence::heartbeat($u1);
-    $map = Presence::many([$u1->id, $u2->id]);
+    $map = Presence::many([$u1->getAuthIdentifier(), $u2->getAuthIdentifier()]);
 
-    expect($map[$u1->id]['status'])->toBe('online')
-        ->and($map[$u2->id]['status'])->toBe('offline');
+    expect($map[$u1->getAuthIdentifier()]['status'])->toBe('online')
+        ->and($map[$u2->getAuthIdentifier()]['status'])->toBe('offline');
 });

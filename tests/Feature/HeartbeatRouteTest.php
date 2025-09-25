@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 it('responds to heartbeat route and updates presence', function () {
     expect(Route::has('presence.heartbeat'))->toBeTrue();
 
-    $user = new User(42);
+    $user = new User(['id' => 42, 'name' => 'Test User']);
 
     $this->actingAs($user, 'web');
     $resp = $this->post('/presence/heartbeat');

@@ -49,7 +49,7 @@ class CachePresenceRepository implements PresenceRepository
     {
         return [
             'user_id' => $user->getAuthIdentifier(),
-            'occurred_at' => now()->toIso8601String(),
+            'occurred_at' => Carbon::now()->toIso8601String(),
             'meta' => $meta,
         ];
     }
@@ -80,14 +80,23 @@ class CachePresenceRepository implements PresenceRepository
             return ['status' => 'offline', 'last_seen_at' => null, 'seconds_ago' => null, 'meta' => []];
         }
 
-        $last = Carbon::parse($raw['last_seen_at']);
-        $ago = now()->diffInSeconds($last);
-        $status = $ago > $this->ttlSeconds ? 'offline' : ($ago > $this->awayAfterSeconds ? 'away' : 'online');
+        $lastSeen = Carbon::parse($raw['last_seen_at']);
+        $now = Carbon::now();
+        $secondsAgo = (int) $now->diffInSeconds($lastSeen);
+
+        // Determine status based on time elapsed
+        if ($secondsAgo >= $this->ttlSeconds) {
+            $status = 'offline';
+        } elseif ($secondsAgo >= $this->awayAfterSeconds) {
+            $status = 'away';
+        } else {
+            $status = 'online';
+        }
 
         return [
             'status' => $status,
-            'last_seen_at' => $last,
-            'seconds_ago' => $ago,
+            'last_seen_at' => $lastSeen,
+            'seconds_ago' => $secondsAgo,
             'meta' => $raw['meta'] ?? [],
         ];
     }

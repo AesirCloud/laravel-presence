@@ -2,45 +2,40 @@
 
 namespace Tests\Fixtures;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
 
-class User implements Authenticatable
+class User extends Model implements Authenticatable
 {
-    public function __construct(public int $id, public string $name = 'Test User')
+    use AuthenticatableTrait;
+
+    protected $fillable = ['id', 'name'];
+    public $timestamps = false;
+    protected $connection = 'testing';
+
+    public function __construct($attributes = [])
     {
+        // Handle old style constructor: new User(1) or new User(1, 'Name')
+        if (is_int($attributes) || is_string($attributes)) {
+            $id = $attributes;
+            $name = func_num_args() > 1 ? func_get_arg(1) : 'Test User';
+            parent::__construct(['id' => $id, 'name' => $name]);
+            return;
+        }
+
+        // Handle new array style constructor: new User(['id' => 1, 'name' => 'Name'])
+        parent::__construct($attributes ?: []);
     }
 
-    public function getAuthIdentifierName(): string
+    // Override to make it work without a real database
+    public function save(array $options = []): bool
     {
-        return 'id';
+        return true;
     }
 
-    public function getAuthIdentifier(): int
+    public static function find($id)
     {
-        return $this->id;
-    }
-
-    public function getAuthPassword(): string
-    {
-        return '';
-    }
-
-    public function getAuthPasswordName(): string
-    {
-        return 'password';
-    }
-
-    public function getRememberToken(): null
-    {
-        return null;
-    }
-
-    public function setRememberToken($value)
-    {
-    }
-
-    public function getRememberTokenName(): string
-    {
-        return 'remember_token';
+        return new static(['id' => $id, 'name' => 'Test User']);
     }
 }
