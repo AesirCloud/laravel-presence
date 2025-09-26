@@ -5,6 +5,16 @@ User presence for **Laravel** (online / away / offline) with a cache-backed hear
 - **Cache driver** (Redis recommended) with TTL-based presence
 - **Webhook driver** for real-time delivery (HMAC-signed)
 
+
+<p align="center">
+<a href="https://github.com/aesircloud/laravel-presence/actions" target="_blank"><img src="https://img.shields.io/github/actions/workflow/status/aesircloud/laravel-presence/test.yml?branch=main&style=flat-square"/></a>
+<a href="https://packagist.org/packages/aesircloud/laravel-presence" target="_blank"><img src="https://img.shields.io/packagist/v/aesircloud/laravel-presence.svg?style=flat-square"/></a>
+<a href="https://packagist.org/packages/aesircloud/laravel-presence" target="_blank"><img src="https://img.shields.io/packagist/dt/aesircloud/laravel-presence.svg?style=flat-square"/></a>
+<a href="https://packagist.org/packages/aesircloud/laravel-presence" target="_blank"><img src="https://img.shields.io/packagist/l/aesircloud/laravel-presence.svg?style=flat-square"/></a>
+</p>
+
+---
+
 ## Requirements
 
 - PHP **8.4+**
