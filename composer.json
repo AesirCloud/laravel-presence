@@ -1,14 +1,26 @@
 {
   "name": "aesircloud/laravel-presence",
-  "version": "dev-main",
   "description": "User presence (online/away/offline) for Laravel with cache or webhook driver and Pest v4 tests.",
   "type": "library",
   "license": "MIT",
+    "keywords": [
+    "AesirCloud",
+    "Presence",
+    "Laravel",
+    "User Presence",
+    "Online Status",
+    "Away Status",
+    "Offline Status"
+  ],
   "authors": [
     {
-      "name": "AesirCloud"
+      "name": "Greg Upton",
+      "email": "greg@aesircloud.com",
+      "homepage": "https://aesircloud.com",
+      "role": "Developer"
     }
   ],
+  "homepage": "https://github.com/AesirCloud/laravel-presence",
     "require": {
     "php": "^8.2|^8.3|^8.4",
     "illuminate/support": "^12.0",
