@@ -82,7 +82,7 @@ class CachePresenceRepository implements PresenceRepository
 
         $lastSeen = Carbon::parse($raw['last_seen_at']);
         $now = Carbon::now();
-        $secondsAgo = (int) $now->diffInSeconds($lastSeen);
+        $secondsAgo = (int) abs($now->diffInSeconds($lastSeen));
 
         // Determine status based on time elapsed
         if ($secondsAgo >= $this->ttlSeconds) {

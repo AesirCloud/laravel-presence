@@ -13,22 +13,18 @@ beforeEach(function () {
 it('marks user online and transitions to away/offline based on time', function () {
     $user = new User(['id' => 1, 'name' => 'Test User']);
 
-    // Set initial time and heartbeat
     Carbon::setTestNow('2025-01-01 00:00:00');
     Presence::heartbeat($user);
 
-    // Check initial status
     $status = Presence::status($user->getAuthIdentifier());
     expect($status['status'])->toBe('online')
         ->and($status['seconds_ago'])->toBe(0);
 
-    // Move time forward by exactly 90 seconds (should be 'away' since >= 90)
-    Carbon::setTestNow('2025-01-01 00:01:30'); // exactly 90 seconds later
+    Carbon::setTestNow('2025-01-01 00:01:30'); // 90 seconds later
     $status = Presence::status($user->getAuthIdentifier());
     expect($status['status'])->toBe('away');
 
-    // Move time forward by exactly 120 seconds total (should be 'offline' since >= 120)
-    Carbon::setTestNow('2025-01-01 00:02:00'); // exactly 120 seconds later
+    Carbon::setTestNow('2025-01-01 00:02:00'); // 120 seconds later
     $status = Presence::status($user->getAuthIdentifier());
     expect($status['status'])->toBe('offline');
 });
