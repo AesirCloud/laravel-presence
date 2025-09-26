@@ -1,6 +1,6 @@
 {
   "name": "aesircloud/laravel-presence",
-  "description": "User presence (online/away/offline) for Laravel with cache or webhook driver and Pest v4 tests.",
+  "description": "User presence (online/away/offline) for Laravel with cache or webhook driver.",
   "type": "library",
   "license": "MIT",
     "keywords": [
