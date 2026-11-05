@@ -22,15 +22,15 @@
   ],
   "homepage": "https://github.com/AesirCloud/laravel-presence",
     "require": {
-    "php": "^8.2|^8.3|^8.4",
-    "illuminate/support": "^12.0",
-    "illuminate/cache": "^12.0",
-    "illuminate/auth": "^12.0",
-    "illuminate/http": "^12.0",
-    "illuminate/contracts": "^12.0"
+    "php": "^8.3",
+    "illuminate/support": "^12.0 || ^13.0",
+    "illuminate/cache": "^12.0 || ^13.0",
+    "illuminate/auth": "^12.0 || ^13.0",
+    "illuminate/http": "^12.0 || ^13.0",
+    "illuminate/contracts": "^12.0 || ^13.0"
   },
   "require-dev": {
-    "orchestra/testbench": "^10.0",
+    "orchestra/testbench": "^10.0 || ^11.0",
     "pestphp/pest": "^4.0",
     "pestphp/pest-plugin-laravel": "^4.0",
     "mockery/mockery": "^1.6"

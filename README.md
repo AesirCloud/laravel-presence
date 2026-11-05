@@ -27,8 +27,8 @@ User presence for **Laravel** (online / away / offline) with a cache-backed hear
 
 ## Requirements
 
-- PHP **8.4+**
-- Laravel **12.x**
+- PHP **8.3, 8.4, or 8.5**
+- Laravel **12.x or 13.x**
 - Cache store (Redis recommended in production)
 
 ---
@@ -64,9 +64,9 @@ Key options (see `config/presence.php`):
 
 ---
 
-## Laravel 12 middleware (auto-heartbeats)
+## Laravel 12 / 13 middleware (auto-heartbeats)
 
-In Laravel 12, register middleware in **`bootstrap/app.php`**:
+In Laravel 12 and 13, register middleware in **`bootstrap/app.php`**:
 
 ```php
 <?php
@@ -152,7 +152,7 @@ REVERB_SCHEME=http
 REVERB_ENCRYPTED=false
 ```
 
-**config/broadcasting.php** should already include the `reverb` driver in Laravel 12. Ensure your default connection is set via `BROADCAST_CONNECTION=reverb`.
+**config/broadcasting.php** should already include the `reverb` driver in Laravel 12 and 13. Ensure your default connection is set via `BROADCAST_CONNECTION=reverb`.
 
 Start the Reverb server in another terminal (or supervisor):
 
