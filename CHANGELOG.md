@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to `aesircloud/laravel-presence` will be documented in this file.
 
+## 1.1.1 - 2026-11-20
+
+- Add required PHP 8.6 coverage and compatible Pest branches while retaining PHP 8.3 and Laravel 12/13 support.
+
 ## 1.1.0 - 2026-11-05
 - Add Laravel 13 support while retaining Laravel 12 compatibility.
 - Add PHP 8.5 to the supported and tested PHP versions.
