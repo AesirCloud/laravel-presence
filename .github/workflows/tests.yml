@@ -3,23 +3,18 @@ name: tests
 on:
   push:
     branches: [ main, master ]
+    tags: ['[0-9]*.[0-9]*.[0-9]*']
   pull_request:
     branches: [ main, master ]
 
 jobs:
   pest:
     runs-on: ubuntu-latest
-    name: PHP ${{ matrix.php }} / Laravel ${{ matrix.laravel }}
+    name: PHP ${{ matrix.php }} / Laravel ^13.30
     strategy:
       fail-fast: false
       matrix:
         php: ['8.3', '8.4', '8.5', '8.6']
-        laravel: ['12.*', '13.*']
-        include:
-          - laravel: '12.*'
-            testbench: '^10.0'
-          - laravel: '13.*'
-            testbench: '^11.0'
 
     steps:
       - name: Checkout
@@ -38,7 +33,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require --dev "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-update --no-interaction
+          composer require --dev "laravel/framework:^13.30" "orchestra/testbench:^11.0" --no-update --no-interaction
           composer update --prefer-dist --no-progress --no-interaction --with-all-dependencies
 
       - name: Verify PHP version
@@ -46,3 +41,39 @@ jobs:
 
       - name: Run Pest
         run: vendor/bin/pest --ci
+
+  release:
+    needs: [pest]
+    if: github.event_name == 'push' && github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare versioned changelog notes
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          python3 - <<'PYNOTES'
+          import datetime
+          import os
+          import pathlib
+          import re
+
+          tag = os.environ['RELEASE_TAG']
+          if re.fullmatch(r'v?(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)', tag) is None:
+              raise SystemExit('A stable semantic version tag is required.')
+          version = tag.removeprefix('v')
+          text = pathlib.Path('CHANGELOG.md').read_text()
+          sections = list(re.finditer(r'^## \[?([^\] \n]+)\]? [—-] (\d{4}-\d{2}-\d{2})\r?\n(.*?)(?=^## |\Z)', text, re.M | re.S))
+          matches = [section for section in sections if section.group(1) == version]
+          if len(matches) != 1 or not matches[0].group(3).strip():
+              raise SystemExit(f'Exactly one nonempty dated changelog entry is required for {version}.')
+          datetime.date.fromisoformat(matches[0].group(2))
+          pathlib.Path(os.environ['RUNNER_TEMP'], 'release-notes.md').write_text(matches[0].group(3).strip() + '\n')
+          PYNOTES
+      - name: Publish the verified release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: gh release create "$RELEASE_TAG" --verify-tag --title "$RELEASE_TAG" --notes-file "$RUNNER_TEMP/release-notes.md" --latest

@@ -1,5 +1,7 @@
 # AesirCloud Laravel Presence
 
+Version **2.0.0** requires **Laravel 13** and PHP **8.3+**, including PHP 8.6. This major release drops Laravel 12 support. Upgrade the host application to Laravel 13 before updating this package; use the previous major release on Laravel 12.
+
 User presence for **Laravel** (online / away / offline) with a cache-backed heartbeat and optional **webhook** fan-out.
 
 - **Cache driver** (Redis recommended) with TTL-based presence
@@ -64,9 +66,9 @@ Key options (see `config/presence.php`):
 
 ---
 
-## Laravel 12 / 13 middleware (auto-heartbeats)
+## Laravel 13 middleware (auto-heartbeats)
 
-In Laravel 12 and 13, register middleware in **`bootstrap/app.php`**:
+In Laravel 13, register middleware in **`bootstrap/app.php`**:
 
 ```php
 <?php
@@ -152,7 +154,7 @@ REVERB_SCHEME=http
 REVERB_ENCRYPTED=false
 ```
 
-**config/broadcasting.php** should already include the `reverb` driver in Laravel 12 and 13. Ensure your default connection is set via `BROADCAST_CONNECTION=reverb`.
+**config/broadcasting.php** should already include the `reverb` driver in Laravel 13. Ensure your default connection is set via `BROADCAST_CONNECTION=reverb`.
 
 Start the Reverb server in another terminal (or supervisor):
 
